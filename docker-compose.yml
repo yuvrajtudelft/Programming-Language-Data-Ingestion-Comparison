@@ -1,0 +1,9 @@
+services:
+  python-benchmark:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    image: pl-ingestion-python:latest
+    working_dir: /app
+    volumes:
+      - ./data:/app/data

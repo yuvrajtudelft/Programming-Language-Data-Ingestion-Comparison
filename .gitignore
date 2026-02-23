@@ -1,0 +1,30 @@
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Data and generated benchmark artifacts
+data/
+
+# Logs
+*.log
+
+# Docker local overrides
+.env
+.env.*
+
+# Future language build outputs
+go/bin/
+go/pkg/
+java/target/
+java/build/
+rust/target/
