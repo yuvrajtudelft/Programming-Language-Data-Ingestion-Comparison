@@ -7,3 +7,11 @@ services:
     working_dir: /app
     volumes:
       - ./data:/app/data
+  go-benchmark:
+    build:
+      context: ./go
+      dockerfile: Dockerfile
+    image: pl-ingestion-go:latest
+    working_dir: /app
+    volumes:
+      - ./data:/app/data
