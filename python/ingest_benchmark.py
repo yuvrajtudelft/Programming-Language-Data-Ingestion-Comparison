@@ -26,8 +26,8 @@ import pyarrow.parquet as pq
 CONFIG = {
     "MODE": "cpu",  # "cpu" (strict validation) or "io" (relaxed validation)
     "INPUT_GLOBS": [],  # Example: ["data/raw/gharchive/*.json.gz"]
-    "DOWNLOAD_GHARCHIVE_DATE": "2025-01-01",  # Set to None to disable downloads
-    "DOWNLOAD_HOURS": 1,
+    "DOWNLOAD_GHARCHIVE_DATE": "2026-01-01",  # Set to None to disable downloads
+    "DOWNLOAD_HOURS": 10,
     "DOWNLOAD_DIR": "data/raw/gharchive",
     "OUTPUT_PARQUET": "data/out/python_cpu_1h.parquet",
     "OUTPUT_CHECKSUM": "data/out/python_cpu_1h.sha256",
