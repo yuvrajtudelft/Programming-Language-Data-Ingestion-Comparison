@@ -17,6 +17,7 @@ from __future__ import annotations
 import csv
 import math
 import os
+import shutil
 import statistics
 import subprocess
 import time
@@ -28,8 +29,8 @@ PYTHON_BIN = REPO_ROOT / ".venv" / "bin" / "python"
 BENCHMARK_SCRIPT = REPO_ROOT / "python" / "ingest_benchmark.py"
 
 ENERGIBRIDGE_CANDIDATES = [
-    Path("/Users/Pattyworks/TUD/sustainable_software_engg/energiBridge/target/release/energibridge"),
-    Path("/Users/Pattyworks/TUD/sustainable_software_engg/EnergiBridge/target/release/energibridge"),
+    REPO_ROOT.parent / "energiBridge" / "target" / "release" / "energibridge",
+    REPO_ROOT.parent / "EnergiBridge" / "target" / "release" / "energibridge",
 ]
 
 WARMUP_RUNS = int(os.getenv("WARMUP_RUNS", "2"))
@@ -42,6 +43,16 @@ REPORT_MD = REPO_ROOT / "data" / "out" / "energibridge_report.md"
 
 
 def find_energibridge_binary() -> Path:
+    env_path = os.getenv("ENERGIBRIDGE_BIN")
+    if env_path:
+        p = Path(env_path).expanduser().resolve()
+        if p.exists():
+            return p
+
+    in_path = shutil.which("energibridge")
+    if in_path:
+        return Path(in_path).resolve()
+
     for candidate in ENERGIBRIDGE_CANDIDATES:
         if candidate.exists():
             return candidate

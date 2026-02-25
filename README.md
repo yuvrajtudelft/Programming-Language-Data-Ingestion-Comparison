@@ -61,6 +61,54 @@ docker compose up --build go-benchmark
 - Outputs default to `data/out/go_cpu_1h.parquet` and `data/out/go_cpu_1h.sha256`.
 - Go auto-detects the shared data directory (`data/` or `../data`) so local runs and Docker both reuse the same dataset/output location.
 
+## Rust benchmark (Docker)
+
+The Rust benchmark mirrors the same ingestion pipeline with a hardcoded config in `rust/src/main.rs`.
+
+### 1) Build image
+
+```bash
+docker build -t pl-ingestion-rust:latest ./rust
+```
+
+### 2) Run benchmark
+
+```bash
+docker run --rm \
+  -v "$(pwd)/data:/app/data" \
+  pl-ingestion-rust:latest
+```
+
+### 3) Run with compose
+
+```bash
+docker compose up --build rust-benchmark
+```
+
+## Java benchmark (Docker)
+
+The Java benchmark mirrors the same ingestion pipeline with a hardcoded config in `java/src/main/java/org/tud/IngestBenchmark.java`.
+
+### 1) Build image
+
+```bash
+docker build -t pl-ingestion-java:latest ./java
+```
+
+### 2) Run benchmark
+
+```bash
+docker run --rm \
+  -v "$(pwd)/data:/app/data" \
+  pl-ingestion-java:latest
+```
+
+### 3) Run with compose
+
+```bash
+docker compose up --build java-benchmark
+```
+
 ## View parquet output
 
 ```bash
@@ -109,3 +157,54 @@ Outputs:
 - Per-run EnergiBridge CSVs in `data/out/energibridge_runs_go/`
 - Aggregated run table in `data/out/energibridge_go_report.csv`
 - Human-readable summary in `data/out/energibridge_go_report.md`
+
+## Measure Rust with EnergiBridge (multiple runs)
+
+```bash
+python scripts/measure_rust_energibridge.py
+```
+
+Optional overrides:
+
+```bash
+WARMUP_RUNS=1 MEASURED_RUNS=3 EB_INTERVAL_US=200 python scripts/measure_rust_energibridge.py
+```
+
+Outputs:
+- Per-run EnergiBridge CSVs in `data/out/energibridge_runs_rust/`
+- Aggregated run table in `data/out/energibridge_rust_report.csv`
+- Human-readable summary in `data/out/energibridge_rust_report.md`
+
+## Measure Java with EnergiBridge (multiple runs)
+
+```bash
+python scripts/measure_java_energibridge.py
+```
+
+Optional overrides:
+
+```bash
+WARMUP_RUNS=1 MEASURED_RUNS=3 EB_INTERVAL_US=200 python scripts/measure_java_energibridge.py
+```
+
+Outputs:
+- Per-run EnergiBridge CSVs in `data/out/energibridge_runs_java/`
+- Aggregated run table in `data/out/energibridge_java_report.csv`
+- Human-readable summary in `data/out/energibridge_java_report.md`
+
+## Measure all languages via Docker (single report)
+
+```bash
+python scripts/measure_all_languages_docker_energibridge.py
+```
+
+Optional overrides:
+
+```bash
+WARMUP_RUNS=1 MEASURED_RUNS=3 EB_INTERVAL_US=200 python scripts/measure_all_languages_docker_energibridge.py
+```
+
+Outputs:
+- Per-run CSVs: `data/out/energibridge_runs_all_languages/`
+- Full cross-language table: `data/out/energibridge_all_languages_report.csv`
+- Ranked summary report: `data/out/energibridge_all_languages_report.md`

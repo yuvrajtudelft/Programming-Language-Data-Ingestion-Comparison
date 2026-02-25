@@ -15,3 +15,19 @@ services:
     working_dir: /app
     volumes:
       - ./data:/app/data
+  rust-benchmark:
+    build:
+      context: ./rust
+      dockerfile: Dockerfile
+    image: pl-ingestion-rust:latest
+    working_dir: /app
+    volumes:
+      - ./data:/app/data
+  java-benchmark:
+    build:
+      context: ./java
+      dockerfile: Dockerfile
+    image: pl-ingestion-java:latest
+    working_dir: /app
+    volumes:
+      - ./data:/app/data
