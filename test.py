@@ -3,18 +3,19 @@
 
 
 import os
+import random
 import subprocess
 
 #files = ["python/main.py", "java/Main.java"]
 
-def run_docker_python(index=0):
+def run_docker_python(index=0, language="python"):
     host_data_dir = os.path.abspath("data")
     volume_spec = f"{host_data_dir}:/app/data"
 
     cmd = [
         "sudo",
         "../EnergiBridge/target/release/energibridge",
-        "-o", f"results/python/{index}.csv",
+        "-o", f"results/{language}/{index}.csv",
         "--summary",
         "docker", "run", "--rm",
         "-v", volume_spec,
@@ -34,5 +35,18 @@ def run_docker_python(index=0):
 
 
 if __name__ == "__main__":
-    for i in range(20):
-        run_docker_python(i)
+    os.makedirs("results/python", mode=0o750, exist_ok=True)
+    os.makedirs("results/go", mode=0o750, exist_ok=True)
+
+    queue = []
+
+    for i in range(5):
+        queue.append((i, "python"))
+        queue.append((i, "go"))
+
+    random.shuffle(queue)
+    print(queue)
+
+    for item in queue:
+        print(item)
+        run_docker_python(*item)
