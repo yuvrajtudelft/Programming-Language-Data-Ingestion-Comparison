@@ -21,6 +21,7 @@ import csv
 import math
 import os
 import shutil
+import random
 import statistics
 import subprocess
 import time
@@ -246,10 +247,23 @@ def main() -> None:
     build_images()
 
     results: list[dict[str, float | int | str]] = []
-    for language, service in LANGUAGE_SERVICES:
-        for i in range(1, WARMUP_RUNS + 1):
-            results.append(run_once(energibridge_bin, language, service, i, measured=False))
-        for i in range(1, MEASURED_RUNS + 1):
+
+    for i in range(1, WARMUP_RUNS + 1):
+        for language, service in LANGUAGE_SERVICES:
+            run_once(energibridge_bin, language, service, i, measured=False)
+    
+    shuffle_seed = 44
+    if shuffle_seed is not None:
+        try:
+            random.seed(int(shuffle_seed))
+        except ValueError:
+            print("shuffle failed with invalid SHUFFLE_SEED, proceeding with non-deterministic randomness")
+            pass
+
+    for i in range(1, MEASURED_RUNS + 1):
+        services = list(LANGUAGE_SERVICES)
+        random.shuffle(services)
+        for language, service in services:
             results.append(run_once(energibridge_bin, language, service, i, measured=True))
 
     write_report(results)
